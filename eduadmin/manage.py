@@ -19,7 +19,7 @@ def register(module_id, user_id):
     module = Module[module_id]
 
     conditions = [{
-        'condition': module.registration_full, 
+        'condition': not module.registration_full, 
         'message': 'Registration is full.'
     }]
 
@@ -37,10 +37,10 @@ def waitlist(module_id, user_id):
     module = Module[module_id]
 
     conditions = [{
-        'condition': module.registration_full, 
+        'condition': not module.registration_full, 
         'message': 'Registration is full.'
     }, {
-        'condition': module.waitlist_full,
+        'condition': not module.waitlist_full,
         'message': 'Waitlist is full.'
     }]
 
@@ -82,7 +82,7 @@ def update_module(module_id, user_id, action, conditions, opening, closing):
     attempt_time = time.now()
 
     for condition in conditions:
-        if not condition.condition:
+        if condition.condition:
             responses.append((False, f'{condition.message}'))
 
     if attempt_time < module.important_dates[opening]:
