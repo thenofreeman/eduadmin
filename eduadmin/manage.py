@@ -9,17 +9,16 @@ from werkzeug.exceptions import abort
 from eduadmin.auth import login_required
 from eduadmin.db import get_db
 
-from module import Module
+from eduadmin.section import Section
 from user import User
 
 bp = Blueprint('manage', __name__, url_prefix='/manage')
 
 @bp.post('/register')
 def register(module_id, user_id):
-    module = Module[module_id]
-
     conditions = [{
-        'condition': not module.registration_full, 
+        'condition': 'registration_full', 
+        'value': False, 
         'message': 'Registration is full.'
     }]
 
@@ -34,13 +33,13 @@ def register(module_id, user_id):
 
 @bp.post('/waitlist')
 def waitlist(module_id, user_id):
-    module = Module[module_id]
-
     conditions = [{
-        'condition': not module.registration_full, 
+        'condition': 'registration_full', 
+        'value': False, 
         'message': 'Registration is full.'
     }, {
-        'condition': not module.waitlist_full,
+        'condition': 'waitlist_full',
+        'value': False, 
         'message': 'Waitlist is full.'
     }]
 
@@ -82,7 +81,7 @@ def update_module(module_id, user_id, action, conditions, opening, closing):
     attempt_time = time.now()
 
     for condition in conditions:
-        if condition.condition:
+        if module.check_condition(condition.condition, condition.value):
             responses.append((False, f'{condition.message}'))
 
     if attempt_time < module.important_dates[opening]:
