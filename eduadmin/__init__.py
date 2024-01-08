@@ -6,9 +6,6 @@ app = Flask(__name__)
 from user import User
 from module import Module
 
-def __main__():
-    pass
-
 @app.post('/register')
 def register(module_id, user_id):
     module = Module[module_id]
@@ -106,6 +103,3 @@ def update_module(module_id, user_id, action, conditions, opening, closing):
         response.message = '\n'.join(message for message in messages)
 
     return response
-
-if __name__ == '__main__':
-    __main__()
