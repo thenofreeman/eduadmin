@@ -22,12 +22,11 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.get('/')
-    def index():
-        return 'Hello'
-
-    from . import auth, db
+    from . import index, auth, db # manage
     db.init_app(app)
+    app.register_blueprint(index.bp)
     app.register_blueprint(auth.bp)
+    # app.register_blueprint(manage.bp)
+    app.add_url_rule('/', endpoint='index')
 
     return app

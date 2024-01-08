@@ -4,6 +4,11 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
+from werkzeug.exceptions import abort
+
+from eduadmin.auth import login_required
+from eduadmin.db import get_db
+
 from module import Module
 from user import User
 
