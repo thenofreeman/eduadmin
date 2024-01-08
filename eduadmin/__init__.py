@@ -1,10 +1,6 @@
 import os
-import time
 
 from flask import Flask
-
-from user import User
-from module import Module
 
 KEY='dev'
 DB_NAME='eduadmin.sql'
@@ -28,9 +24,10 @@ def create_app(test_config=None):
 
     @app.get('/')
     def index():
-        pass
+        return 'Hello'
 
-    from . import auth, manage
-    app.register_blueprint(manage.bp)
+    from . import auth, db
+    db.init_app(app)
+    app.register_blueprint(auth.bp)
 
     return app
